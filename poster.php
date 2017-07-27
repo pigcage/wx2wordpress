@@ -8,7 +8,7 @@ $username='wordpress用户';
 $password='wordpress密码'; 
 
 //文章内容 
-$postContent='<title>' . $postTitle . '</title>'.'<category>' . $postCategory . '</category>' . $postBody;
+$postContent='<title>' . $postTitle . '</title>'.'<category>' . $postCategory . '</category>' . '<!--more-->'. $postBody;
 
 //图片本地化
 require('./saveImage.php');
