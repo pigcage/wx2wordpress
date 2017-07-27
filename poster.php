@@ -15,6 +15,7 @@ require('./saveImage.php');
 echo "<p>正在转存文章图片到服务器..</p>";
 $postContent=post_save_images($postContent);
 $postContent=post_save_video($postContent);
+$postContent=post_save_bg($postContent);
 //发布文章
 echo "<p>开始发布文章..</p>";
 require('./wp-includes/class-IXR.php');
