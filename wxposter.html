@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title>广工合唱团官网文章发布平台</title>
+<style>
+html{
+	height:100%;
+}
+p{
+	font-size:0.7em;color:#999;
+}
+.submit{
+	color: #fff;
+	background-color: #fd6e6e;
+	border: 0;
+	padding: 8 20;
+}
+body{
+	background-color:#ccc;
+	color:#333;
+}
+div{
+	position:absolute;
+	margin:auto;
+	top:0;left:0;right:0;bottom:0;
+	padding:0 2em;
+	height:400px;
+	width:30%;
+	min-width:300px;
+	text-align:center;
+	border:2px solid #d26868;
+	background-color:#fff;
+}
+div *{
+	margin-bottom:.75em;
+}
+div h1{
+	margin-top:0;
+	font-size:1.25em;
+}
+img{
+	margin-top:.75em;
+	width:10%;
+}
+</style>
+</head>
+<body>
+	<div style="text-align:center;">
+		<h1 style="margin-top:40px;">广工合唱团官网文章发布平台</h1>
+		<form action="wxreceiver.php" id="uploadForm" method="post" enctype="multipart/form-data">
+			文章链接 <input type="text" id="link" name="link"  style="width:40%;"/><br>
+			发布密码 <input type="password" id="password" name="password" style="width:40%;" /><br>
+			<input type="hidden" name="MAX_FILE_SIZE" value="10000000"/>
+			选择封面 <input type="file" name="pic" style="width:40%;"/><br>
+			文章分类 <select name="cat">
+				<option value="4">团内动态</option>
+				<option value="5">友人来访</option>
+				<option value="6">演出交流</option>
+			</select><br>
+			<input class="submit" type="submit" value="发布文章" />
+		</form>
+		<p>1、本平台用于转发微信文章到官网<br>
+		2、随服务器网速不同，后台处理需三十秒左右，<br>
+		点发布后稍等片刻，不要反复刷新页面或多次点击<br>
+		3、请上传封面图片，仅支持10M以内的jpg格式图像<br>
+		4、使用过程中如有问题，请截图并联系猪笼，微信：leon24012</p>
+	</div>
+</body>
+</html>
