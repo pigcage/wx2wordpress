@@ -48,6 +48,17 @@
 		}
 		return $content;
 	}
+
+	//背景图片储存
+	function post_save_bg( $content ){
+		set_time_limit(240);	//时间限制
+		$bg = "background-image: url(";
+		if(stripos($content, $bg)){
+			echo "!!<br>";
+			$content = str_replace($bg, $bg . 'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=', $content);
+		}
+		return $content;
+	}
 	
 	//单一图片储存，参数为原图片地址，文章id，是否设为题图（是则为1，其它均否），返回array(file,type,url,error)
 	function save_images($image_url,$i){
