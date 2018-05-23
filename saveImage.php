@@ -9,9 +9,13 @@
 				if(empty($image_url)) continue;
 				$pos=strpos($image_url,get_bloginfo('url'));	//检查是否为本地图片，这里参数二可以改为域名
 				if($pos===false){
-					$res=save_images($image_url,$i);	//储存该图片，返回储存后的结果
-					$replace=$res['url'];						//新的本地路径
+					//$res=save_images($image_url,$i);	//储存该图片，返回储存后的结果
+					//$replace=$res['url'] || "unknowURL";						//新的本地路径
+					
+					//下面不保存到本地，直接使用图床
+					$replace= 'http://*********.php?url=' . $image_url;  //图床
 					$src = $image_url . '" src="'. $replace;
+					$src = str_replace('https','http',$src);
 					$content=str_replace($image_url,$src,$content);	//替换到原文本中
 				}
 				$i++;
@@ -19,7 +23,7 @@
 		}
 	return $content;
 	}
-	//获取url参数，由于未处理url中的'&'符号，返回的键名前带'amp;'
+	//获取url参数，参数名前带amp;
 	function convertUrlQuery($query){
 		$queryParts = explode('&', $query);
 		$params = array();
@@ -48,14 +52,14 @@
 		}
 		return $content;
 	}
-
+	
 	//背景图片储存
 	function post_save_bg( $content ){
 		set_time_limit(240);	//时间限制
 		$bg = "background-image: url(";
 		if(stripos($content, $bg)){
-			echo "!!<br>";
-			$content = str_replace($bg, $bg . 'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=', $content);
+			$_bg = str_replace('https','http',$bg);
+			$content = str_replace($bg, $_bg . 'http://************.php?url=', $content);  //图床
 		}
 		return $content;
 	}
@@ -67,7 +71,6 @@
 		// $filename=basename($image_url);	//basename()的形式不能读取正确格式
 		$filetype=get_wx_file_type($image_url);
 		$filename = date("YmHis").rand(100,999).(".".$filetype['ext']."");
-		
 		$res=wp_upload_bits($filename,'',$file);//上传到uploads文件夹
 		$attach_id = insert_attachment($res['file'], $filename, $filetype,false);//添加到媒体库
 		
@@ -76,17 +79,9 @@
 	
 	//图片添加到媒体库，参数为：图片路径（无域名），图片类型（array），是否为封面，返回图片id
 	function insert_attachment($file,$filename,$filetype,$isCover){
-		// if($isCover){
-			// $dirs=array(
-				// "url"=>"http://www.gdutchoir.cn/postCover",
-			// );
-			// echo "wpdir:";
-			// print_r(wp_upload_dir());
-			// echo "<br>dirs:";
-			// print_r($dirs);
-		// } else {
-			$dirs=wp_upload_dir();
-		// }
+
+		$dirs=wp_upload_dir();
+
 		$attachment=array(
 			'guid'=>$dirs['url'].'/'.$filename,
 			'post_mime_type'=>$filetype['type'],
@@ -103,17 +98,17 @@
 	
 	//获取微信图片的格式，以wp_check_filetype()的形式返回
 	function get_wx_file_type($image_url){
-		$preg = preg_match_all('/wx_fmt=jpeg/',$image_url,$match_arr);
+		$preg = preg_match_all('/mmbiz_jpg/',$image_url,$match_arr);
 		if($preg) {
 			$ext = 'jpg';
 			$type = 'image/jpeg';
 		} 
-		$preg = preg_match_all('/wx_fmt=png/',$image_url,$match_arr);
+		$preg = preg_match_all('/mmbiz_png/',$image_url,$match_arr);
 		if($preg) {
 			$ext = 'png';
 			$type = 'image/png';
 		} 
-		$preg = preg_match_all('/wx_fmt=gif/',$image_url,$match_arr);
+		$preg = preg_match_all('/mmbiz_gif/',$image_url,$match_arr);
 		if($preg) {
 			$ext = 'gif';
 			$type = 'image/gif';
